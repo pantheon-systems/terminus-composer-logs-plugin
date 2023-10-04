@@ -12,6 +12,7 @@ use Pantheon\Terminus\Site\SiteAwareInterface;
 use Pantheon\Terminus\Site\SiteAwareTrait;
 use Pantheon\Terminus\Request\RequestAwareInterface;
 use Pantheon\Terminus\Request\RequestAwareTrait;
+use Pantheon\Terminus\Exceptions\TerminusException;
 
 /**
  * Say hello to the user
@@ -70,16 +71,127 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
             return;
         }
 
-        $dashboard_protocol = $this->getConfig()->get('dashboard_protocol');
-        $dashboard_host = $this->getConfig()->get('dashboard_host');
+        $protocol = $this->getConfig()->get('protocol');
+        $host = $this->getConfig()->get('host');
 
-        $logs_url = sprintf('%s://%s%s', $dashboard_protocol, $dashboard_host, $logs_url);
+        $logs_url = sprintf('%s://%s%s', $protocol, $host, $logs_url);
 
         $options = [
             'headers' => [
                 'X-Pantheon-Session' => $this->request->session()->get('session'),
             ],
         ];
+        $result = $this->request->request($logs_url, $options);
+        $status_code = $result->getStatusCode();
+
+        if ($status_code != 200) {
+            $this->log()->notice('Could not retrieve composer logs for this environment.');
+            return;
+        }
+        
+        $data = $result->getData();
+        if (empty($data)) {
+            $this->log()->notice('No composer logs found for this environment.');
+            return;
+        }
+
+        // Now, some manipulation for the data.
+        $data = html_entity_decode($data);
+        $data = str_replace('<br />', "\n", $data);
+        $data = str_replace('<br>', "\n", $data);
+        $data = str_replace('&nbsp;', ' ', $data);
+        $data = strip_tags($data);
+
+        $this->output()->write($data);
+
+    }
+
+    /**
+     * Show composer logs for recent update attempt.
+     *
+     * @command composer:logs-update
+     * @param string $site_env Site & environment in the format `site-name.env`
+     *
+     * @authenticated
+     */
+    public function composerLogsUpdate($site_env)
+    {
+        $site_env_parts = explode('.', $site_env);
+        if (count($site_env_parts) != 2) {
+            throw new TerminusException('Invalid site environment specified.');
+        }
+        $env_id = array_pop($site_env_parts);
+
+        $valid_workflows = [
+            'check_upstream_updates',
+            'apply_upstream_updates',
+        ];
+
+        $this->requireSiteIsNotFrozen($site_env);
+        $workflows = $this->getSite($site_env)->getWorkflows()->all();
+        $update_workflow = null;
+
+        foreach ($workflows as $workflow) {
+            if (in_array($workflow->get('type'), $valid_workflows)) {
+                if ($workflow->get('environment_id') == $env_id) {
+                    $update_workflow = $workflow;
+                    break;
+                }
+            }
+        }
+
+        if (!$update_workflow) {
+            $this->log()->notice('No composer update logs found for this environment.');
+            return;
+        }
+
+        $workflow_id = $update_workflow->get('id');
+        $workflow_base_url = $this->getSite($site_env)->getWorkflows()->getUrl();
+
+        $workflow_url = sprintf('%s/%s?hydrate=tasks', $workflow_base_url, $workflow_id);
+
+        $options = [
+            'headers' => [
+                'X-Pantheon-Session' => $this->request->session()->get('session'),
+            ],
+        ];
+        $result = $this->request->request($workflow_url, $options);
+        $status_code = $result->getStatusCode();
+
+        if ($status_code != 200) {
+            $this->log()->notice('Could not retrieve composer logs for this environment.');
+            return;
+        }
+        
+        $data = $result->getData();
+
+        if (empty($data->tasks)) {
+            $this->log()->notice('No composer logs found for this environment.');
+            return;
+        }
+
+        $logs_url = null;
+
+        foreach ($data->tasks as $task) {
+            if ($task->fn_name === 'queue_job_runner_task' && $task->params->task_type === 'job_runner_artifact_update') {
+                if (empty($task->build_url)) {
+                    $this->log()->notice('No composer logs found for this environment.');
+                }
+                $logs_url = $task->build_url;
+            }
+        }
+
+        if (!$logs_url) {
+            $this->log()->notice('No composer logs found for this environment.');
+            return;
+        }
+
+
+        $protocol = $this->getConfig()->get('protocol');
+        $host = $this->getConfig()->get('host');
+
+        $logs_url = sprintf('%s://%s%s', $protocol, $host, $logs_url);
+
         $result = $this->request->request($logs_url, $options);
         $status_code = $result->getStatusCode();
 
