@@ -1,11 +1,6 @@
 <?php
-/**
- * This variation on the Hello command shows how use the `@authenticated`
- * attribute to signal Terminus to require an authenticated session to
- * use this command.
- */
 
-namespace Pantheon\TerminusHello\Commands;
+namespace Pantheon\TerminusComposerLogs\Commands;
 
 use Pantheon\Terminus\Commands\TerminusCommand;
 use Pantheon\Terminus\Site\SiteAwareInterface;
@@ -14,11 +9,6 @@ use Pantheon\Terminus\Request\RequestAwareInterface;
 use Pantheon\Terminus\Request\RequestAwareTrait;
 use Pantheon\Terminus\Exceptions\TerminusException;
 
-/**
- * Say hello to the user
- *
- * When you rename this class, make sure the new name ends with "Command" so that Terminus can find it.
- */
 class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface, RequestAwareInterface
 {
     use SiteAwareTrait;

@@ -1,13 +1,13 @@
-# Terminus Plugin Example
+# Terminus Composer Logs Plugin
 
 [![CircleCI](https://circleci.com/gh/pantheon-systems/terminus-plugin-example.svg?style=shield)](https://circleci.com/gh/pantheon-systems/terminus-plugin-example)
 [![Actively Maintained](https://img.shields.io/badge/Pantheon-Actively_Maintained-yellow?logo=pantheon&color=FFDC28)](https://pantheon.io/docs/oss-support-levels#actively-maintained-support)
 
 [![Terminus v2.x - v3.x Compatible](https://img.shields.io/badge/terminus-2.x%20--%203.x-green.svg)](https://github.com/pantheon-systems/terminus-plugin-example/tree/2.x)
 
-A simple plugin for Terminus-CLI to demonstrate how to add new commands.
+A simple plugin that shows composer logs via Terminus.
 
-Adds commands 'hello' and 'auth:hello' to Terminus. Learn more about Terminus Plugins in the
+Adds commands 'composer:logs' and 'composer:logs-update' to Terminus. Learn more about Terminus Plugins in the
 [Terminus Plugins documentation](https://pantheon.io/docs/terminus/plugins)
 
 ## Configuration
@@ -15,35 +15,16 @@ Adds commands 'hello' and 'auth:hello' to Terminus. Learn more about Terminus Pl
 These commands require no configuration
 
 ## Usage
-* `terminus hello`
-* `terminus auth:hello`
+* `terminus composer:logs SITE.ENV`
+* `terminus composer:logs-update SITE.ENV`
 
 ## Installation
 
 To install this plugin using Terminus 3:
 ```
-terminus self:plugin:install terminus-plugin-example
+terminus self:plugin:install terminus-composer-logs-plugin
 ```
 
-On older versions of Terminus:
-```
-mkdir -p ~/.terminus/plugins
-curl https://github.com/pantheon-systems/terminus-plugin-example/archive/2.x.tar.gz -L | tar -C ~/.terminus/plugins -xvz
-```
-
-## Testing
-This example project includes four testing targets:
-
-* `composer lint`: Syntax-check all php source files.
-* `composer cs`: Code-style check.
-* `composer unit`: Run unit tests with phpunit
-* `composer functional`: Run functional test with bats
-
-To run all tests together, use `composer test`.
-
-Note that prior to running the tests, you should first run:
-* `composer install`
-* `composer install-tools`
 
 ## Help
-Run `terminus help auth:hello` for help.
+Run `terminus help composer:logs` for help.
