@@ -187,23 +187,29 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
             'job_runner_artifact_install',
         ];
 
+        $job_id = null;
+
         foreach ($data->tasks as $task) {
             if ($task->fn_name === 'queue_job_runner_task' && in_array($task->params->task_type, $valid_tasks)) {
-                if (empty($task->build_url)) {
-                    return null;
+                $responses = $task->responses;
+                foreach ($responses as $response) {
+                    $body = $response->body;
+                    $job_id_regex = '/Job\sID:\s([a-z0-9\-]{36})/';
+                    preg_match($job_id_regex, $body, $matches);
+                    if (!empty($matches[1])) {
+                        $job_id = $matches[1];
+                        break;
+                    }
                 }
-                // @todo Get from messages in task (parse the messages and build the url)!!!
-                $logs_url = $task->build_url;
+                break;
             }
         }
 
-        if (!$logs_url) {
+        if (!$job_id) {
             return null;
         }
 
-        $regex = '/\/api\/sites\/([0-9a-f\-]{36})\/environments\/(.+)\/build\/logs[a-z\-0-9]{3,4}\/([0-9a-f\-]{36})/';
-        // Do a search-replace using regex.
-        $logs_url = preg_replace($regex, '/api/sites/$1/environments/$2/build/logs-v3/$3', $logs_url);
+        $logs_url = sprintf('/api/sites/%s/environments/%s/build/logs-v3/%s', $this->getSite($site_env)->id, $this->getEnv($site_env)->id, $job_id);
 
         return $logs_url;
     }
