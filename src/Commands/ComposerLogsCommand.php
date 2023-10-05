@@ -8,6 +8,7 @@ use Pantheon\Terminus\Site\SiteAwareTrait;
 use Pantheon\Terminus\Request\RequestAwareInterface;
 use Pantheon\Terminus\Request\RequestAwareTrait;
 use Pantheon\Terminus\Exceptions\TerminusException;
+use Pantheon\Terminus\Models\Workflow;
 
 class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface, RequestAwareInterface
 {
@@ -23,7 +24,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
      *
      * @authenticated
      */
-    public function composerLogs($site_env, $options = [
+    public function composerLogs(string $site_env, array $options = [
         'commit' => null,
     ])
     {
@@ -65,6 +66,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
         }
 
         if (!$logs_url && $commit_to_search_in_fallback) {
+            // If we didn't find a commit with a build logs url, we'll try to find a workflow with the same commit hash and build the logs url from there.
             $logs_url = $this->getLogsUrlForCommitInWorkflows($site_env, $commit_to_search_in_fallback);
         }
 
@@ -86,7 +88,14 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
         $this->output()->write($data);
     }
 
-    public function getComposerLogsFromUrl($logs_url): string|null
+    /**
+     * Get composer logs from a given url.
+     *
+     * @param string $logs_url Logs url to get logs from.
+     *
+     * @return string|null
+     */
+    public function getComposerLogsFromUrl(string $logs_url): string|null
     {
         $protocol = $this->getConfig()->get('protocol');
         $host = $this->getConfig()->get('host');
@@ -122,8 +131,13 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
 
     /**
      * Search for build logs url in workflow as a fallback mechanism.
+     *
+     * @param string $site_env Site & environment in the format `site-name.env`
+     * @param string $commit Commit hash to show logs for (default to the most recent commit)
+     *
+     * @return string|null
      */
-    public function getLogsUrlForCommitInWorkflows($site_env, $commit): string|null
+    public function getLogsUrlForCommitInWorkflows(string $site_env, string $commit): string|null
     {
         $site_env_parts = explode('.', $site_env);
         if (count($site_env_parts) != 2) {
@@ -155,7 +169,15 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
 
     }
 
-    public function getBuildLogsUrlFromWorkflow($workflow, $site_env): string|null
+    /**
+     * Get build logs url from workflow.
+     *
+     * @param object $workflow \Pantheon\Terminus\Models\Workflow object.
+     * @param string $site_env Site & environment in the format `site-name.env`
+     *
+     * @return string|null
+     */
+    public function getBuildLogsUrlFromWorkflow(Workflow $workflow, string $site_env): string|null
     {
         $workflow_id = $workflow->get('id');
         $workflow_base_url = $this->getSite($site_env)->getWorkflows()->getUrl();
@@ -193,6 +215,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
             if ($task->fn_name === 'queue_job_runner_task' && in_array($task->params->task_type, $valid_tasks)) {
                 $responses = $task->responses;
                 foreach ($responses as $response) {
+                    // We have no other way to get the job id and we need it to get the logs url, then parse the responses.
                     $body = $response->body;
                     $job_id_regex = '/Job\sID:\s([a-z0-9\-]{36})/';
                     preg_match($job_id_regex, $body, $matches);
@@ -222,7 +245,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
      *
      * @authenticated
      */
-    public function composerLogsUpdate($site_env)
+    public function composerLogsUpdate(string $site_env)
     {
         $site_env_parts = explode('.', $site_env);
         if (count($site_env_parts) != 2) {
