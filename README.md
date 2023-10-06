@@ -1,9 +1,7 @@
 # Terminus Composer Logs Plugin
 
 ![Github Actions Status](https://github.com/pantheon-systems/terminus-composer-logs-plugin/actions/workflows/ci.yml/badge.svg)
-
 [![Early Access](https://img.shields.io/badge/Pantheon-Early_Access-yellow?logo=pantheon&color=FFDC28)](https://docs.pantheon.io/oss-support-levels#early-access)
-
 [![Terminus v3.x Compatible](https://img.shields.io/badge/terminus-3.x-green.svg)](https://github.com/pantheon-systems/terminus-composer-logs-plugin/tree/main)
 
 A plugin that shows composer logs via Terminus.
