@@ -43,7 +43,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
 
         foreach ($commits as $commit) {
             $hash = $commit->hash;
-            
+
             if (!$hash_to_find) {
                 // If we don't have a hash to find, we'll use the most recent commit.
                 if (!empty($commit->build_logs_url)) {
@@ -113,7 +113,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
         if ($status_code != 200) {
             return null;
         }
-        
+
         $data = $result->getData();
         if (empty($data)) {
             return null;
@@ -166,7 +166,6 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
         }
 
         return $this->getBuildLogsUrlFromWorkflow($sync_code_workflow, $site_env);
-
     }
 
     /**
@@ -195,7 +194,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
         if ($status_code != 200) {
             return null;
         }
-        
+
         $data = $result->getData();
 
         if (empty($data->tasks)) {

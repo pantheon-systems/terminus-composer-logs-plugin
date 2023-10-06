@@ -20,6 +20,8 @@ jobs:
         run: composer install
       - name: Validate Code
         run: composer lint
+      - name: Code linters
+        run: composer cs
 
   phpcompatibility:
     runs-on: ubuntu-latest
