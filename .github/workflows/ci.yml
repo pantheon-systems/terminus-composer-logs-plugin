@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: PHPCompatibility
-        uses: pantheon-systems/phpcompatibility-action@vdev
+        uses: pantheon-systems/phpcompatibility-action@dev
         with:
           test-versions: 7.4-8.3
           paths: ${{ github.workspace }}/src
