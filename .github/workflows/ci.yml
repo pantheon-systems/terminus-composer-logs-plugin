@@ -6,7 +6,7 @@ jobs:
   checkout_lint:
     runs-on: ubuntu-latest
     container:
-      image: quay.io/pantheon-public/php-ci:v8.0
+      image: quay.io/pantheon-public/php-ci:v8.2
     name: Checkout & Lint
     steps:
       - name: Checkout

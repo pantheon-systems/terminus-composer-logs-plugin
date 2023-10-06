@@ -120,7 +120,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
         }
 
         // Now, some manipulation for the data.
-        $data = html_entity_decode($data);
+        $data = html_entity_decode($data, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
         $data = str_replace('<br />', "\n", $data);
         $data = str_replace('<br>', "\n", $data);
         $data = str_replace('&nbsp;', ' ', $data);
