@@ -9,14 +9,14 @@ terminus self:plugin:install "${PLUGIN_DIR}"
 echo "===================================================="
 
 echo "Run composer:logs"
-OUTPUT=terminus composer:logs "${TERMINUS_SITE}.dev"
+OUTPUT=$(terminus composer:logs "${TERMINUS_SITE}.dev")
 echo $OUTPUT
 echo $OUTPUT | grep -q "Composer version"
 
 echo "===================================================="
 
 echo "Run composer:logs-update"
-OUTPUT=terminus composer:logs-update "${TERMINUS_SITE}.dev"
+OUTPUT=$(terminus composer:logs-update "${TERMINUS_SITE}.dev")
 echo $OUTPUT
 echo $OUTPUT | grep -q "Composer version"
 echo "===================================================="
