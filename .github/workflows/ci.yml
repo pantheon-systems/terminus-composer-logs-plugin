@@ -51,7 +51,7 @@ jobs:
       TERMINUS_VERSION: 3.2.2
       PLUGIN_DIR: ${{ github.workspace }}
     needs:
-      - checkout_build
+      - checkout_lint
       - phpcompatibility
     steps:
       - name: Setup PHP with PECL extension
