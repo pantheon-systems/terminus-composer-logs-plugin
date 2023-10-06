@@ -7,7 +7,6 @@
         "psr-4": { "Pantheon\\TerminusComposerLogs\\": "src" }
     },
     "require-dev": {
-        "symfony/yaml": "^5",
         "squizlabs/php_codesniffer": "^3.6"
     },
     "scripts": {
