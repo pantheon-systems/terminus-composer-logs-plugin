@@ -8,6 +8,11 @@ echo "Installing Plugin: "
 terminus self:plugin:install "${PLUGIN_DIR}"
 echo "===================================================="
 
+echo "Try to apply updates"
+terminus upstream:updates:status "${TERMINUS_SITE}.dev" || true
+terminus upstream:updates:apply "${TERMINUS_SITE}.dev" --yes || true
+echo "===================================================="
+
 echo "Run composer:logs"
 OUTPUT=$(terminus composer:logs "${TERMINUS_SITE}.dev")
 echo $OUTPUT
