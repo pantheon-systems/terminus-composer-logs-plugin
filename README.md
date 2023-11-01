@@ -6,7 +6,7 @@
 
 A plugin that shows composer logs via Terminus.
 
-Adds commands 'composer:logs' and 'composer:logs-update' to Terminus. Learn more about Terminus Plugins in the
+Adds commands 'composer:logs' and 'composer:logs:upstream-update' to Terminus. Learn more about Terminus Plugins in the
 [Terminus Plugins documentation](https://pantheon.io/docs/terminus/plugins)
 
 ## Installation
@@ -57,7 +57,7 @@ Scaffolding files for pantheon-systems/drupal-integrations:
   - Copy [project-root]/.drush-lock-update from assets/drush-lock-update
 ```
 
-### `composer:logs-update`
+### `composer:logs:upstream-update`
 
 Use this command to get composer logs for a upstream update (apply or check). This is specially useful for debugging failed upstream updates.
 
@@ -65,7 +65,7 @@ Example:
 
 ```
 # Get logs for latest upstream update workflow
-terminus composer:logs-update $SITE.$ENV
+terminus composer:logs:upstream-update $SITE.$ENV
 ```
 
 Example output:
