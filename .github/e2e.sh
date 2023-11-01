@@ -20,8 +20,8 @@ echo $OUTPUT | grep -q "Composer version"
 
 echo "===================================================="
 
-echo "Run composer:logs-update"
-OUTPUT=$(terminus composer:logs-update "${TERMINUS_SITE}.dev")
+echo "Run composer:logs:upstream-update"
+OUTPUT=$(terminus composer:logs:upstream-update "${TERMINUS_SITE}.dev")
 echo $OUTPUT
 echo $OUTPUT | grep -q "Composer version"
 echo "===================================================="

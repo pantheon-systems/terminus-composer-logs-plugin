@@ -18,7 +18,9 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
     /**
      * Show composer logs for a given commit.
      *
-     * @command composer:logs
+     * @command composer:logs:commit
+     * @aliases composer:logs
+     *
      * @param string $site_env Site & environment in the format `site-name.env`
      * @option string $commit Commit hash to show logs for (default to the most recent commit)
      *
@@ -239,7 +241,7 @@ class ComposerLogsCommand extends TerminusCommand implements SiteAwareInterface,
     /**
      * Show composer logs for recent update attempt.
      *
-     * @command composer:logs-update
+     * @command composer:logs:upstream-update
      * @param string $site_env Site & environment in the format `site-name.env`
      *
      * @authenticated
