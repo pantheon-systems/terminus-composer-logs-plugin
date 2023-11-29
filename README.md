@@ -59,7 +59,7 @@ Scaffolding files for pantheon-systems/drupal-integrations:
 
 ### `composer:logs:upstream-update`
 
-Use this command to get composer logs for a upstream update (apply or check). This is specially useful for debugging failed upstream updates.
+Use this command to get composer logs for an upstream update (apply or check). This is especially useful for debugging failed upstream updates.
 
 Example:
 
