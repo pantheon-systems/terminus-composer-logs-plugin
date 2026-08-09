@@ -10,7 +10,7 @@
         "php": "^8.0"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.6"
+        "squizlabs/php_codesniffer": "^3.13"
     },
     "scripts": {
         "cs": "phpcs --standard=PSR12 -n src",
