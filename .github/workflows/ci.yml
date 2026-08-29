@@ -2,12 +2,16 @@ name: CI
 on:
   push:
 
+permissions: {}
+
 jobs:
   checkout_lint:
     runs-on: ubuntu-latest
     container:
       image: quay.io/pantheon-public/php-ci:v8.2
     name: Checkout & Lint
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -26,6 +30,8 @@ jobs:
   phpcompatibility:
     runs-on: ubuntu-latest
     name: PHP Compatibility
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -39,6 +45,8 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     name: Functional testing matrix - PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
     if: ${{ github.repository_owner == 'pantheon-systems' }}
+    permissions:
+      contents: read
     strategy:
       matrix:
         operating-system: [ 'macos-latest' ]
