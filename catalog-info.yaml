@@ -1,12 +1,13 @@
+# Managed by github-terraform — do not edit manually
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: terminus-composer-logs-plugin
-  description: Auto-generated catalog info for pantheon-systems/terminus-composer-logs-plugin
+  name: "terminus-composer-logs-plugin"
+  description: "Terminus plugin to show composer logs."
   annotations:
-    backstage.io/techdocs-ref: dir:docs/
+    "backstage.io/techdocs-ref": "dir:docs/"
 spec:
-  type: tool
-  lifecycle: experimental
-  owner: devx
+  type: "tool"
+  lifecycle: "experimental"
+  owner: "developer-experience"
