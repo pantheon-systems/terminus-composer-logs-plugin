@@ -10,9 +10,9 @@ jobs:
     name: Checkout & Lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
       - name: Save repo content as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3.2.1
         with:
           name: full-workspace
           path: ${{ github.workspace }}
@@ -28,9 +28,9 @@ jobs:
     name: PHP Compatibility
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
       - name: PHPCompatibility
-        uses: pantheon-systems/phpcompatibility-action@dev
+        uses: pantheon-systems/phpcompatibility-action@bd72eb001d4fb9817c9d6e1a157a71e287f3ff80 # dev 2023-10-04T16:54:18Z
         with:
           test-versions: 8.0-8.3
           paths: ${{ github.workspace }}/src
@@ -55,18 +55,18 @@ jobs:
       - phpcompatibility
     steps:
       - name: Setup PHP with PECL extension
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: gd, mbstring, zip, ssh2-1.3.1, pcov
           coverage: pcov
           ini-values: error_reporting=E_ALL
       - name: Download repo content from artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
         with:
           name: full-workspace
       - name: Install Terminus
-        uses: pantheon-systems/terminus-github-actions@main
+        uses: pantheon-systems/terminus-github-actions@19469b3c812d2b55b00ba1a1d432c55ceab3f181 # main 2026-10-22T22:48:34Z
         with:
           pantheon-machine-token: ${{ secrets.TERMINUS_TOKEN }}
           terminus-version: ${{ env.TERMINUS_VERSION }}
