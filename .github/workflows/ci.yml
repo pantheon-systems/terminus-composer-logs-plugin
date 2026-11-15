@@ -66,7 +66,7 @@ jobs:
         with:
           name: full-workspace
       - name: Install Terminus
-        uses: pantheon-systems/terminus-github-actions@19469b3c812d2b55b00ba1a1d432c55ceab3f181 # main 2026-10-22T22:48:34Z
+        uses: pantheon-systems/terminus-github-actions@26fc7c754c80fd1c9fe2d6d3ae77528a15033b6f # main 2026-10-22T22:48:34Z
         with:
           pantheon-machine-token: ${{ secrets.TERMINUS_TOKEN }}
           terminus-version: ${{ env.TERMINUS_VERSION }}
